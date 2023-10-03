@@ -156,6 +156,7 @@ main{
     position: fixed;
     padding-top: 2%;
     padding-bottom: 2%;
+    left:0;
     top: 0;
     bottom: 0;
     display: flex;
@@ -273,11 +274,13 @@ footer a{
 
 
 /*Modal*/
-.scroll_page{
+.scroll_page {
     position: absolute;
+    width: 7%;
     display: flex;
     flex-direction: column;
-    right: 3%;
+    top: 10%;
+    left: 90%;
     z-index: -1;
 }
 
@@ -388,6 +391,10 @@ footer a{
     padding-top: 5px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 
+}
+
+.info_tel{
+    display: none;
 }
 
 .illustration{
@@ -673,5 +680,90 @@ footer a{
 
     .nom_perso{
         font-size: 15px;
+    }
+
+    .fiche_content{
+        width: 100%;
+    }
+
+    .info_container{
+        font-size: 18px;
+    }
+
+    .info_left{
+        width: 55%;
+    }
+
+    .info_right{
+        display: none;
+    }
+    
+    .info_tel{
+        display: contents;
+    }
+
+    .illu_info{
+        position: absolute;
+        right: 0;
+        width: 45%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .illustration{
+        width: 125px;
+        height: 125px;
+    }
+
+    .pv, .pe{
+        margin-top: 25%;
+    }
+
+    .bordure_pe, .bordure_pv{
+        width: 55px;
+    }
+
+    .vita{
+        position: relative;
+        top: 120px;
+        width: 20%;
+        text-align: center;
+    }
+
+    .ene{
+        position: relative;
+        top: 120px;
+        width: 20%;
+        text-align: center;
+    }
+
+    .gds_stats{
+        font-size: 15px;
+    }
+
+    .gds_stats td{
+        padding: 5px;
+    }
+
+    .res, .maitrise {
+        font-size: 13px;
+    }
+
+    .res td, .maitrise td {
+        padding: 5px;
+    }
+
+    .ss_stats td {
+        padding-right: 5px;
+        padding-left: 5px;
+        padding-top: 5px;
+    }
+
+    .contexte{
+        font-size: 12px;
+    }
+
+    .ss_stats {
+        font-size: 12px;
     }
 }
