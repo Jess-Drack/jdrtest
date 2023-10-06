@@ -1,7 +1,8 @@
-window.addEventListener("hashchange", function() {
-    URLPerso = window.location.hash.substring(1);
-    const idPerso = URLPerso.substring(URLPerso.length-1);
-    const nomPerso = URLPerso.substring(0, URLPerso.length-1);
+function database(nomPerso) {
+    //URLPerso = window.location.hash.substring(1);
+    //const idPerso = URLPerso.substring(URLPerso.length-1);
+    //const nomPerso = URLPerso.substring(0, URLPerso.length-1);
+    var idPerso = 0;
 
     const prenom = document.getElementsByClassName("prenom")[idPerso];
     const nom = document.getElementsByClassName("nom")[idPerso];
@@ -95,6 +96,7 @@ window.addEventListener("hashchange", function() {
     const contexteRecup = document.getElementsByClassName("crecup")[idPerso];
     const contexteRecup2 = document.getElementsByClassName("crecup2")[idPerso];
 
+
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "../data/persofantaisie.json");
     xhr.onload = () => {
@@ -102,9 +104,8 @@ window.addEventListener("hashchange", function() {
             const personnageTableau = JSON.parse(xhr.responseText);
             for(let i = 0; i < personnageTableau.length; ++i){
                 if(nomPerso === personnageTableau[i].info.prenom){
-                    console.log(nomPerso)
-                    console.log(personnageTableau[i].info.prenom)
-                    const personnage = personnageTableau[i];
+                    //console.log(personnageTableau[i].info.prenom)
+                    const personnage = personnageTableau[i];       
 
                     prenom.textContent = personnage.info.prenom;
                     nom.textContent = personnage.info.nom;
@@ -143,7 +144,6 @@ window.addEventListener("hashchange", function() {
                     social.textContent = socialValue;
 
                     resistanceBonus(resistancePhysique, constitutionValue, personnage.resistance_bonus[0].value)
-                    console.log(personnage.resistance_bonus[0].value)
                     resistanceBonus(bonusPhysique, constitutionValue, personnage.resistance_bonus[1].value)
                     resistanceBonus(resistanceMagique, magieValue, personnage.resistance_bonus[2].value)
                     resistanceBonus(bonusMagique, magieValue, personnage.resistance_bonus[3].value)
@@ -241,12 +241,472 @@ window.addEventListener("hashchange", function() {
                 }
             };
         }
-    }           
+    }         
     xhr.send();
-});
+};
 
+// Fonction pour créer une modal avec des données variables
+function createModal(nomPerso, idPerso) {
+    var modalHTML = `
+    <div class="modal_fiche" id="${nomPerso+idPerso}">
+    <div class="fiche_content">
+        <div class="fiche_content_header">
+            <div id="close_modal" class="modal_close">&times;</div>
+            <div class="btn_haut"><a href="" target="popup" onclick="window.open(document.URL + '','name','width=800,height=600')"><i class="fa fa-window-restore"></i></a></div>
+            <div class="header_container">
+                <p><span class="prenom"></span><span class="nom"></span></p>
+            </div>
+            <div class="btn_container">
+            <div id="fiche_save" class="btn_bas"><i class="fa fa-floppy-o"></i></div>
+            <div id="fiche_edit" class="btn_bas"><i class="fa fa-pencil-square-o"></i></div>
+            </div>
+        </div>
+        <section class="scroll_page">
+            <div class="rouleau_competence">
+                <a href="#Compétence${nomPerso}" class="chapitres_competence">Compétences</a>
+                <img src="../images/fantaisie/assets/rouleau_bleu.png" class="rouleau"/>
+            </div>
+            <div class="rouleau_competence">
+                <a href="#Bagages${nomPerso}" class="chapitres_bagage">Bagages</a>
+                <img src="../images/fantaisie/assets/rouleau_rouge.png" class="rouleau"/>
+            </div>
+        </section>
 
-function resistanceBonus(resbonus, comparatif, personnage){
+        <div class="fiche_body">
+        <div class="info_container">
+            <div class="info_left">
+                <p>Age : <span class="age"></span><span> ans</span></p>
+                <p>Genre : <span class="genre"></span></p>
+                <p>Taille : <span class="taille"></span></p>
+                <p>Poids : <span class="poids"></span><span> kg</span></p>
+                <div class="info_tel">
+                    <p>Race : <span class="race"></span></p>
+                    <p>Classe : <span class="classe"></span></p>
+                    <p>Métier : <span class="metier"></span></p>
+                    <p>Loisir : <span class="loisir"></span></p>
+                </div>
+            </div>
+
+            <div class="vita">
+                <p>Vitalité</p>
+                <p class="pv">15</p>
+                <img class="bordure_pv" src="../images/fantaisie/assets/pvpe.png"/>
+            </div>
+
+            <div class="illu_info">
+                <img class="illustration" />
+            </div>
+
+            <div class="ene">
+                <p>Energie</p>
+                <p class="pe">15</p>
+                <img class="bordure_pe" src="../images/fantaisie/assets/pvpe.png"/>
+            </div>
+
+            <div class="info_right">
+                <p>Race : <span class="race"></span></p>
+                <p>Classe : <span class="classe"></span></p>
+                <p>Métier : <span class="metier"></span></p>
+                <p>Loisir : <span class="loisir"></span></p>
+            </div>
+        </div>
+
+        <div class="evaluation">
+            <p class="police">Evaluation <p>95</p></p>
+        </div>
+
+        <section class="stats">
+
+            <table class="gds_stats">
+                <tbody>
+                    <tr>
+                        <td class="police">Constitution</td>
+                        <td class="police">Agilité</td>
+                        <td class="police">Mental</td>
+                        <td class="police">Magie</td>
+                        <td class="police">Charisme</td>
+                        <td class="police">Savoir</td>
+                    </tr>
+                    <tr>
+                        <td class="constitution"></td>
+                        <td class="agilite"></td>
+                        <td class="mental"></td>
+                        <td class="magie"></td>
+                        <td class="charisme"></td>
+                        <td class="savoir"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="Ouais">
+            <table class="res">
+                <tr>
+                    <td class="police">Res. Physique</td>
+                    <td class="police">Bonus Physique</td>
+                </tr>
+                <tr>
+                    <td class="res-physique"></td>
+                    <td class="bonus-physique"></td>
+                </tr>
+            </table>
+        
+            <table class="maitrise">
+                <tbody>
+                    <tr>
+                        <td class="police">Corps</td>
+                        <td class="police">Esprit</td>
+                        <td class="police">Social</td>
+                    </tr>
+                    <tr>
+                        <td class="corps"></td>
+                        <td class="esprit"></td>
+                        <td class="social"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="res">
+                <tr>
+                    <td class="police">Res. Magique</td>
+                    <td class="police">Bonus Magique</td>
+                </tr>
+                <tr>
+                    <td class="res-magique"></td>
+                    <td class="bonus-magique"></td>
+                </tr>
+            </table>
+        </section>
+    
+        <section class="ss_stats">
+            <table class="ss_stats_left">
+                <tr>
+                    <td class="police">Pugilat</td>
+                    <td class="pugilat"></td>
+                    <td class="contexte">
+                        <span class="cpugilat"></span>
+                        <span class="cpugilat2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Arme de Corps a Corps</td>
+                    <td class="armeCaC"></td>
+                    <td class="contexte">
+                        <span class="ccac"></span>
+                        <span class="ccac2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Précision</td>
+                    <td class="precision"></td>
+                    <td class="contexte">
+                        <span class="cprecision"></span>
+                        <span class="cprecision2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Esquive</td>
+                    <td class="esquive"></td>
+                    <td class="contexte">
+                        <span class="cesquive"></span>
+                        <span class="cesquive2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Parade</td>
+                    <td class="parade"></td>
+                    <td class="contexte">
+                        <span class="cparade"></span>
+                        <span class="cparade2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Discrétion</td>
+                    <td class="discretion"></td>
+                    <td class="contexte">
+                        <span class="cdiscretion"></span>
+                        <span class="cdiscretion2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Observation</td>
+                    <td class="observation"></td>
+                    <td class="contexte">
+                        <span class="cobservation"></span>
+                        <span class="cobservation2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Perception</td>
+                    <td class="perception"></td>
+                    <td class="contexte">
+                        <span class="cperception"></span>
+                        <span class="cperception2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Psyché</td>
+                    <td class="psyche"></td>
+                    <td class="contexte">
+                        <span class="cpsyche"></span>
+                        <span class="cpsyche2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Intimidation</td>
+                    <td class="intimidation"></td>
+                    <td class="contexte">
+                        <span class="cintimidation"></span>
+                        <span class="cintimidation2"></span>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="ss_stats_right">
+                <tr>
+                    <td class="police">Communication</td>
+                    <td class="communication"></td>
+                    <td class="contexte">
+                        <span class="ccommunication"></span>
+                        <span class="ccommunication2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Autorité</td>
+                    <td class="autorite"></td>
+                    <td class="contexte">
+                        <span class="cautorite"></span>
+                        <span class="cautorite2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Médecine</td>
+                    <td class="medecine"></td>
+                    <td class="contexte">
+                        <span class="cmedecine"></span>
+                        <span class="cmedecine2"></span>
+                    </td>
+                <tr>
+                    <td class="police">Pilotage</td>
+                    <td class="pilotage"></td>
+                    <td class="contexte">
+                        <span class="cpilotage"></span>
+                        <span class="cpilotage2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Artisanat</td>
+                    <td class="artisanat"></td>
+                    <td class="contexte">
+                        <span class="cartisanat"></span>
+                        <span class="cartisanat2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Vitesse</td>
+                    <td class="vitesse"></td>
+                    <td class="contexte">
+                        <span class="cvitesse"></span>
+                        <span class="cvitesse2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Instinct</td>
+                    <td class="instinct"></td>
+                    <td class="contexte">
+                        <span class="cinstinct"></span>
+                        <span class="cinstinct2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Sang-froid</td>
+                    <td class="sang-froid"></td>
+                    <td class="contexte">
+                        <span class="csang-froid"></span>
+                        <span class="csang-froid2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Régénération de PV</td>
+                    <td class="regen"></td>
+                    <td class="contexte">
+                        <span class="cregen"></span>
+                        <span class="cregen2"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="police">Récupération de PE</td>
+                    <td class="recup"></td>
+                    <td class="contexte">
+                        <span class="crecup"></span>
+                        <span class="crecup2"></span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        </div>
+    </div>
+</div>
+<div class="modal_fiche" id="Compétence${nomPerso}">
+    <section class="scroll_page_competence">
+        <div class="rouleau_competence">
+            <a href="#${nomPerso+idPerso}" class="chapitres_competence">Personnage</a>
+            <img src="../images/fantaisie/assets/rouleau_bleu.png" class="rouleau"/>
+        </div>
+        <div class="rouleau_competence">
+            <a href="#Bagages${nomPerso}" class="chapitres_bagage">Bagages</a>
+            <img src="../images/fantaisie/assets/rouleau_rouge.png" class="rouleau"/>
+        </div>
+    </section>
+    <div class="fiche_content">
+        <div class="fiche_content_header">
+            <div id="close_modal" class="modal_close">&times;</div>
+            <div class="header_container">
+                <p><span class="prenom"></span><span class="nom"></span></p>
+            </div>
+        </div>
+        <div class="fiche_body">
+        <h2 class="Catégorie_Tableau">Traits</h2>
+        <div class="tableau-trait"></div>
+        <h2 class="Catégorie_Tableau">Compétences</h2>
+        <div class="tableau-competence"></div>
+        </div>
+    </div>
+</div>
+<div class="modal_fiche" id="Bagages${nomPerso}">
+    <section class="scroll_page_bagage">
+        <div class="rouleau_competence">
+            <a href="#${nomPerso+idPerso}" class="chapitres_competence">Personnage</a>
+            <img src="../images/fantaisie/assets/rouleau_bleu.png" class="rouleau"/>
+        </div>
+        <div class="rouleau_competence">
+            <a href="#Compétence${nomPerso}" class="chapitres_bagage">Compétence</a>
+            <img src="../images/fantaisie/assets/rouleau_rouge.png" class="rouleau"/>
+        </div>
+    </section>
+    <div class="fiche_content">
+        <div class="fiche_content_header">
+            <div id="close_modal" class="modal_close">&times;</div>
+            <div class="header_container">
+                <p><span class="prenom"></span><span class="nom"></span></p>
+            </div>
+        </div>
+        <div class="fiche_body">
+        <h2 class="Catégorie_Tableau">Armes</h2>
+        <div class="tableau-arme"></div>
+        <h2 class="Catégorie_Tableau">Armures</h2>
+        <div class="tableau-armure"></div>
+        <div class="conteneur_objet_argent">
+            <div>
+                <h2 class="Catégorie_Tableau">Bagages</h2>
+                <div class="tableau-objet"></div>
+            </div>
+            <div>
+                <h2 class="Catégorie_Tableau">Devise</h2>
+                <div class="tableau-argent"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+    `;
+  
+    // Ajouter la modal à la fin du corps du document
+    document.body.insertAdjacentHTML("beforebegin", modalHTML);
+  
+    // Lier l'événement de clic au bouton de fermeture
+    var close = document.getElementsByClassName("modal_close");
+    for (var i = close.length - 1; i >= 0; --i) {
+        close[i].addEventListener("click", function() {
+            closeModal();
+        });
+    }
+    window.onclick = function(event) {
+        var modal = document.getElementById(nomPerso+idPerso);
+        var modalCompetence = document.getElementById("Compétence"+nomPerso);
+        var modalBagages = document.getElementById("Bagages"+nomPerso);
+        if (event.target == modal) {
+          closeModal()
+        }
+    }
+  }
+  
+  // Données pour les modals
+  /*var blancData = {
+    prenom: "John",
+    nom: "Doe",
+    age: 30,
+    genre: "Homme",
+    // Ajoutez d'autres données ici
+  };
+  
+  var competenceData = {
+    // Ajoutez des données pour la modal de compétence ici
+  };
+  
+  var bagagesData = {
+    // Ajoutez des données pour la modal de bagages ici
+  };
+  
+  // Créer les modals en utilisant les données
+  createModal("Blanc5", blancData);
+  createModal("CompétenceBlanc", competenceData);
+  createModal("BagagesBlanc", bagagesData);*/
+  function modal(id){
+    const idPerso = id.substring(id.length-1);
+    const nomPerso = id.substring(0, id.length-1);
+    createModal(nomPerso, idPerso);
+    openModal(id);
+    database(nomPerso, idPerso);
+  }
+  /*function modal(nomPerso, idPerso){
+    var modal = document.getElementsByClassName('modal_fiche')[0];
+    modal.id = nomPerso+idPerso;
+    console.log(modal.id)
+  }*/
+  //var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+//var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+/*btn.onclick = function() {
+    URLPerso = document.getElementById("myBtn");
+    const id = URLPerso.dataset.id;
+    const idPerso = id.substring(id.length-1);
+    const nomPerso = id.substring(0, id.length-1);
+    createModal(nomPerso, idPerso);
+    openModal(id);
+}*/
+  // Fonction pour ouvrir la modal
+  function openModal(id) {
+    console.log(id)
+    var modal = document.getElementById(id);
+    modal.style.display = "flex";
+  }
+  
+  // Fonction pour fermer la modal
+  function closeModal() {
+    var modal = document.getElementsByClassName('modal_fiche');
+    for (var i = modal.length - 1; i >= 0; --i) {
+        modal[i].remove();
+    }
+  }
+  
+  // Lier les événements de clic aux éléments pour ouvrir les modals
+  /*document.getElementById("openBlancModal").addEventListener("click", function() {
+    openModal("Blanc5");
+  });
+  
+  document.getElementById("openCompetenceModal").addEventListener("click", function() {
+    openModal("CompétenceBlanc");
+  });
+  
+  document.getElementById("openBagagesModal").addEventListener("click", function() {
+    openModal("BagagesBlanc");
+  });*/
+
+  function resistanceBonus(resbonus, comparatif, personnage){
     if(comparatif >= 70){
         resbonus.innerHTML = 1 + personnage;
     } else if(comparatif <=30){
